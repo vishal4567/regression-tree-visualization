@@ -1,4 +1,5 @@
 // Initializing the Visualization by defining Visualization Size
+/* global $,d3,self */
 var margin = {
 top: 20,
 right: 120,
@@ -11,7 +12,6 @@ var height = 800 - margin.top - margin.bottom;
 var duration = 750,
 i = 0,
 root;
-var $, d3;
 var tree = d3.layout.tree()
 .size([ height - 50, width ]);
 
@@ -26,12 +26,13 @@ var svg = d3.select('body').append('svg')
 .append('g')
 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 // Importing the rules file in form of JSON into the program
+var input = prompt('Please enter file path','/pretty.json');
 var json = (function () {
 json = null;
 $.ajax({
 'async': false,
 'global': false,
-'url': '/pretty.json',
+'url': input,
 'dataType': 'json',
 'success': function (data) {
 json = data;
@@ -163,7 +164,7 @@ d.y = d.depth * 180;
 // Update the nodes…
 var node = svg.selectAll('g.node')
 .data(nodes, function (d) {
-return d.id || (d.id = i++);
+return d.id || (d.id = i++); // eslint-disable-line no-plusplus
 });
 // Enter any new nodes at the parent's previous position.
 d3.selectAll('path').style('stroke', function (d) {
@@ -188,7 +189,6 @@ if (d1.stdev == click && d1.name == click2) {
 return true;
 }
 return false;
-
 });
 doReset();
 
@@ -328,7 +328,6 @@ d.y0 = d.y;
 });
 };
 
-var self;
 update(root);
 root.children.forEach(collapse);
 d3.select(self.frameElement).style('height', '800px');
